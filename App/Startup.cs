@@ -31,6 +31,8 @@ namespace App
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddDefaultUI()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<IdentityContext>();
             services.AddControllersWithViews();
         }
@@ -53,6 +55,7 @@ namespace App
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

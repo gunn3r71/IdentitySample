@@ -24,9 +24,13 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Secret">Restricted access area</a>
+                        </li>
                     </ul>
-                    
-                    <partial name="_LoginPartial"/>
+                    <div class="float-right">
+                        <partial name="_LoginPartial" />
+                    </div>
                 </div>
             </div>
         </nav>
