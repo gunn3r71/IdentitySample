@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Extensions;
 using Microsoft.AspNetCore.Authorization;
 
 namespace App.Controllers
@@ -31,8 +32,21 @@ namespace App.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin,Manager")]
+        [ClaimsAuthorize("Home","PodeLer")]
+        //[Authorize(Roles = "Admin,Manager")]
         public IActionResult Secret()
+        {
+            return View();
+        }
+
+        [Authorize(Policy = "PodeExcluir")]
+        public IActionResult SecretExcluir()
+        {
+            return View();
+        }
+
+        [Authorize(Policy = "PodeLer")]
+        public IActionResult Exibir()
         {
             return View();
         }

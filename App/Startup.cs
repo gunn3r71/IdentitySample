@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using App.Areas.Identity.Data;
+using App.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,6 +36,16 @@ namespace App
                 .AddDefaultUI()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<IdentityContext>();
+
+            services.AddAuthorization(o =>
+            {
+                o.AddPolicy("PodeExcluir", p=>p.RequireClaim("PodeExcluir"));
+                o.AddPolicy("PodeLer", p => p.Requirements.Add(new PermissaoNecessaria("PodeLer")));
+                o.AddPolicy("PodeEscrever", p => p.Requirements.Add(new PermissaoNecessaria("PodeEscrever")));
+            });
+
+            services.AddSingleton<IAuthorizationHandler,PermissaoNecessariaHandler>();
+
             services.AddControllersWithViews();
         }
 
