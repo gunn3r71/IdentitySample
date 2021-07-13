@@ -9,9 +9,19 @@ namespace App
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostEnvironment hostEnvironment)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(hostEnvironment.ContentRootPath)
+                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", true, true)
+                .AddEnvironmentVariables();
+
+            if (hostEnvironment.IsProduction())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -32,7 +42,8 @@ namespace App
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error/500");
+                app.UseStatusCodePagesWithRedirects("/Error/{0}");
                 app.UseHsts();
             }
             app.UseHttpsRedirection();

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using App.Extensions;
+﻿using App.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace App.Config

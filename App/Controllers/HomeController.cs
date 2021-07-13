@@ -29,10 +29,11 @@ namespace App.Controllers
 
         public IActionResult Privacy()
         {
+            throw new Exception("Deu ruim");
             return View();
         }
 
-        [ClaimsAuthorize("Home","PodeLer")]
+        [ClaimsAuthorize("Home","PodeTestar")]
         //[Authorize(Roles = "Admin,Manager")]
         public IActionResult Secret()
         {
@@ -51,10 +52,34 @@ namespace App.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [Route("/Error/{statusCode:int:minlength(3):maxlength(3)}")]
+        public IActionResult Error(int statusCode)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var errorModel = new ErrorViewModel
+            {
+                StatusCode = statusCode
+            };
+
+            if (statusCode >= 500)
+            {
+                errorModel.Titulo = "Erro =(";
+                errorModel.Mensagem = "Desculpe, houve um erro!\nNossa equipe foi avisada e resolveremos o mais rápido possível!";
+            } else if (statusCode == 403)
+            {
+                errorModel.Titulo = "Sem acesso";
+                errorModel.Mensagem = "Por favor, verifique se o usuário logado tem permissão de acesso à este recurso!";
+            } else if (statusCode == 404)
+            {
+                errorModel.Titulo = "Página não encontrada";
+                errorModel.Mensagem = "Oops, a página solicitada não foi encontrada!";
+            }
+            else
+            {
+                errorModel.Titulo = "Erro =(";
+                errorModel.Mensagem = "Algo deu errado!";
+            }
+
+            return View("Error", errorModel);
         }
     }
 }
